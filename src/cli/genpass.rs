@@ -2,6 +2,7 @@ use clap::Parser;
 
 #[derive(Debug, Parser)]
 pub struct GenPassOpts {
+    // cargo run -- genpass -l 32
     #[arg(short, long, default_value_t = 16)]
     pub length: u8,
 

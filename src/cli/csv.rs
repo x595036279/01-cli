@@ -2,16 +2,19 @@ use std::{fmt::Display, str::FromStr};
 
 use clap::Parser;
 
-use super::verify_input_file;
+use super::verify_file;
 
 #[derive(Debug, Parser)]
 pub struct CsvOpts {
-    #[arg(short, long,value_parser = verify_input_file)]
+    // cargo run -- csv -i assets/juventus.csv
+    // cargo run -- csv -i assets/juventus.csv --format yaml
+    // CSV文件
+    #[arg(short, long,value_parser = verify_file)]
     pub input: String,
-
+    // 输出的文件
     #[arg(short, long)]
     pub output: Option<String>,
-
+    // 输出文件格式
     #[arg(long,value_parser = parse_format, default_value = "Json")]
     pub format: OutputFormat,
 
