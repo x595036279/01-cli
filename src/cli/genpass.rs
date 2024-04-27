@@ -1,4 +1,6 @@
+use crate::{process_genpass, CmdExector};
 use clap::Parser;
+use zxcvbn::zxcvbn;
 
 #[derive(Debug, Parser)]
 pub struct GenPassOpts {
@@ -17,4 +19,20 @@ pub struct GenPassOpts {
 
     #[arg(long, default_value_t = true)]
     pub symbol: bool,
+}
+
+impl CmdExector for GenPassOpts {
+    async fn execute(self) -> anyhow::Result<()> {
+        let password = process_genpass(
+            self.length,
+            self.uppercase,
+            self.lowercase,
+            self.numbers,
+            self.symbol,
+        )?;
+        println!("{}", password);
+        let estimate = zxcvbn(&password, &[]).unwrap();
+        eprintln!("Password strength: {}", estimate.score());
+        Ok(())
+    }
 }
